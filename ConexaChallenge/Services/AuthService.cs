@@ -52,7 +52,8 @@ namespace ConexaChallenge.Services
         {
             List<Claim> claims = [
                 new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.NameIdentifier, user.UserName)
+                new(ClaimTypes.NameIdentifier, user.UserName),
+                new(ClaimTypes.Role, user.Role)
             ];
 
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
