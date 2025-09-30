@@ -5,8 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConexaChallenge.Services
 {
-    public class MovieService(AppDbContext dbContext) : IMovieService
+    public class MovieService(AppDbContext dbContext, IHttpClientFactory httpClientFactory) : IMovieService
     {
+        private readonly AppDbContext dbContext = dbContext;
+        private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
+
         public async Task<List<Movie>> GetAllAsync()
         {
             return await dbContext.Movies.ToListAsync();
@@ -66,6 +69,51 @@ namespace ConexaChallenge.Services
             await dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<SwapiSyncResult?> SyncSwapiFilmsAsync()
+        {
+            HttpClient client = httpClientFactory.CreateClient();
+
+            try
+            {
+                SwapiFilmResponse? response = await client.GetFromJsonAsync<SwapiFilmResponse>("https://swapi.dev/api/films");
+                if (response is null || response.Results.Count == 0)
+                {
+                    return null;
+                }
+
+                SwapiSyncResult result = new();
+
+                foreach (SwapiFilm film in response.Results)
+                {
+                    MovieRequest movieRequest = new()
+                    {
+                        Title = film.Title,
+                        Description = film.Opening_crawl,
+                        ReleaseDate = DateOnly.Parse(film.Release_date)
+                    };
+
+                    Movie? existing = await dbContext.Movies.FirstOrDefaultAsync(x => x.Title == film.Title);
+                    if (existing is not null)
+                    {
+                        await UpdateAsync(existing.MovieId, movieRequest);
+                        result.Updated++;
+                    }
+                    else
+                    {
+                        await CreateAsync(movieRequest);
+                        result.Created++;
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                //Should log SWAPI's fail
+                return null;
+            }            
         }
     }
 }

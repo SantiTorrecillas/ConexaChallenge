@@ -10,5 +10,6 @@ namespace ConexaChallenge.Services
         Task<Movie?> CreateAsync(MovieRequest movie);
         Task<Movie?> UpdateAsync(int id, MovieRequest movie);
         Task<bool> DeleteAsync(int id);
+        Task<SwapiSyncResult?> SyncSwapiFilmsAsync();
     }
 }

@@ -141,5 +141,41 @@ namespace Tests
 
             result.Should().BeOfType<NotFoundResult>();
         }
+
+        [Fact]
+        public async Task SyncSwapiFilms_ReturnsOk_WhenThereAreFilms()
+        {
+            // Arrange
+            Mock<IMovieService> mockService = new();
+            mockService.Setup(s => s.SyncSwapiFilmsAsync())
+                .ReturnsAsync(new SwapiSyncResult { Created = 2, Updated = 1 });
+
+            MovieController controller = new(mockService.Object);
+
+            // Act
+            ActionResult<SwapiSyncResult?> result = await controller.SyncSwapiFilms();
+
+            // Assert
+            OkObjectResult okResult = Assert.IsType<OkObjectResult>(result.Result);
+            SwapiSyncResult value = Assert.IsType<SwapiSyncResult>(okResult.Value);
+            Assert.Equal(2, value.Created);
+            Assert.Equal(1, value.Updated);
+        }
+
+        [Fact]
+        public async Task SyncSwapiFilms_ReturnsNoContent_WhenResultIsNull()
+        {
+            // Arrange
+            Mock<IMovieService> mockService = new();
+            mockService.Setup(s => s.SyncSwapiFilmsAsync()).ReturnsAsync((SwapiSyncResult?)null);
+
+            MovieController controller = new(mockService.Object);
+
+            // Act
+            ActionResult<SwapiSyncResult?> result = await controller.SyncSwapiFilms();
+
+            // Assert
+            Assert.IsType<NoContentResult>(result.Result);
+        }
     }
 }

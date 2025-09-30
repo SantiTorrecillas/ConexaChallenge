@@ -39,6 +39,7 @@ builder.Services.AddAuthorizationBuilder()
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

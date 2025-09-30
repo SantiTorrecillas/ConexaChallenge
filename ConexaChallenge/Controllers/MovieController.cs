@@ -69,5 +69,17 @@ namespace ConexaChallenge.Controllers
 
             return NoContent();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("sync-swapi")]
+        public async Task<ActionResult<SwapiSyncResult?>> SyncSwapiFilms()
+        {
+            SwapiSyncResult? response = await service.SyncSwapiFilmsAsync();
+            if (response is null)
+            {
+                return NoContent();
+            }
+            return Ok(response);
+        }
     }
 }
