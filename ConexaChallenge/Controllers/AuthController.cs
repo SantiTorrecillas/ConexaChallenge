@@ -1,8 +1,8 @@
 ﻿using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
 using ConexaChallenge.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 namespace ConexaChallenge.Controllers
 {
     [Route("api/[controller]")]
@@ -15,7 +15,7 @@ namespace ConexaChallenge.Controllers
         {
             User? user = await service.RegisterAsync(request);
 
-            if (user is null) 
+            if (user is null)
             {
                 return BadRequest("UserName already exists");
             }
