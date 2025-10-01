@@ -17,9 +17,5 @@ Luego de clonar el repositorio configurar la conexión a la base de datos:
   
 -Este proyecto usa Scalar como documentación interactiva de la API en vez de Swagger, una opcion reciente y mas moderna, aceptada por la comunidad de .NET 9
 	La UI de Scalar estará disponible en: http://localhost:5128/scalar/v1
-  <img width="347" height="667" alt="image" src="https://github.com/user-attachments/assets/cb4774f9-6cec-4051-b5a9-94a9403e32ce" />
-  <img width="1509" height="666" alt="image" src="https://github.com/user-attachments/assets/328e649a-6653-48b7-a4d0-e4254c171c34" />
-  <img width="1773" height="776" alt="image" src="https://github.com/user-attachments/assets/60c3a220-0f61-44e6-abf1-a7123d32502a" />
-
-
+	
 -Se Sugiere correr los test para comprobar su correcto funcionamiento desde el test explorer en Visual Studio o desde su IDE de preferencia
