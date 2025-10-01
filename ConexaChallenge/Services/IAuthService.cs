@@ -1,0 +1,11 @@
+﻿using ConexaChallenge.Dtos;
+using ConexaChallenge.Entities;
+
+namespace ConexaChallenge.Services
+{
+    public interface IAuthService
+    {
+        Task<User?> RegisterAsync(UserRequest user);
+        Task<string?> LoginAsync(UserRequest user);
+    }
+}

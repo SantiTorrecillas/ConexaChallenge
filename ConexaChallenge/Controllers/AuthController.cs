@@ -1,26 +1,40 @@
 ﻿using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
-using Microsoft.AspNetCore.Identity;
+using ConexaChallenge.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConexaChallenge.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService service) : ControllerBase
     {
-        public static User user = new();
 
         [HttpPost("Register")]
-        public ActionResult<User> Register(UserDto request)
+        public async Task<ActionResult<User>> Register(UserRequest request)
         {
-            string hashedPassword = new PasswordHasher<User>()
-                .HashPassword(user, request.Password);
+            User? user = await service.RegisterAsync(request);
 
-            user.UserName = request.UserName;
-            user.PasswordHash = hashedPassword;
+            if (user is null)
+            {
+                return BadRequest("UserName already exists");
+            }
 
             return Ok(user);
+        }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult<string>> Login(UserRequest request)
+        {
+            string? token = await service.LoginAsync(request);
+
+            if (token is null)
+            {
+                return BadRequest("Invalid username or password");
+            }
+
+            return Ok(token);
+
         }
     }
 }
