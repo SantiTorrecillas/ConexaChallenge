@@ -1,21 +1,82 @@
-ConexaChallenge
+# Conexa Challenge
 
-Este repositorio contiene la solución al challenge técnico para Conexa.  
-Luego de clonar el repositorio configurar la conexión a la base de datos:
+Este repositorio contiene la solución al **challenge técnico para Conexa**, desarrollado en **.NET 9** con **Entity Framework Core** y **SQL Server**.
 
--Configurar ambiente
-	Editar `appsettings.json` con tu cadena de conexión a SQL Server:
-   	"ConnectionStrings": {
-     	"DefaultConnection": "Server=localhost;Database=ConexaDb;User Id=sa;Password=your_password;TrustServerCertificate=True;"
-   	}
+---
 
--Ejecutar migraciones
-	Desde la package manajer console seria suficiente con ejecutar "update-database", de no reconocerse este comando podria estar faltando alguna nugget relacionado a entity framework
+## Configuración del proyecto
 
--Ejecutar en local
-	La api comenzara a ejecutarse en http://localhost:5128 como indica el `appsettings.json`
-  
--Este proyecto usa Scalar como documentación interactiva de la API en vez de Swagger, una opcion reciente y mas moderna, aceptada por la comunidad de .NET 9
-	La UI de Scalar estará disponible en: http://localhost:5128/scalar/v1
-	
--Se Sugiere correr los test para comprobar su correcto funcionamiento desde el test explorer en Visual Studio o desde su IDE de preferencia
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/SantiTorrecillas/ConexaChallenge.git
+cd ConexaChallenge
+```
+
+### 2. Configurar la base de datos
+Editar el archivo `appsettings.json` y actualizar la cadena de conexión con tus credenciales de SQL Server:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=localhost;Database=ConexaDb;User Id=sa;Password=your_password;TrustServerCertificate=True;"
+}
+```
+
+### 3. Aplicar migraciones
+Desde la **Package Manager Console** de Visual Studio o tu IDE preferido:
+
+```powershell
+update-database
+```
+
+> ⚠️ Si el comando no se reconoce, probablemente falte instalar los paquetes de Entity Framework Core Tools.
+
+### 4. Ejecutar la API
+Iniciar el proyecto desde Visual Studio o con:
+
+```bash
+dotnet run --project ConexaChallenge
+```
+
+Por defecto, la API estará disponible en:
+```
+http://localhost:5128
+```
+
+---
+
+## Documentación de la API
+
+Este proyecto utiliza **Scalar** en lugar de Swagger, una alternativa moderna y compatible con .NET 9.
+
+La documentación interactiva estará disponible en:
+```
+http://localhost:5128/scalar/v1
+```
+
+---
+
+## Tests
+
+Para validar el correcto funcionamiento:
+
+- Desde **Visual Studio Test Explorer**, o  
+- Con CLI:
+
+```bash
+dotnet test
+```
+
+---
+
+##  Tecnologías principales
+
+- [.NET 9](https://dotnet.microsoft.com/)  
+- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)  
+- [SQL Server](https://www.microsoft.com/sql-server)  
+- [Scalar](https://scalar.com/) para documentación de APIs  
+
+---
+
+## Estado
+
+El proyecto se encuentra en una versión estable para levantar en local y correr con base de datos SQL Server.
