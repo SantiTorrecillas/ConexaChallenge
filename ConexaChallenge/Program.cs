@@ -1,5 +1,6 @@
 using ConexaChallenge.Data;
 using ConexaChallenge.Interfaces;
+using ConexaChallenge.Seed;
 using ConexaChallenge.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
@@ -37,7 +38,15 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddHttpClient();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
+
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    IConfiguration config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    await AppDbSeeder.SeedRootUserAsync(db, config);
+}
 
 if (app.Environment.IsDevelopment())
 {
