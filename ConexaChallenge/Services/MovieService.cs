@@ -1,14 +1,16 @@
 ﻿using ConexaChallenge.Data;
 using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
+using ConexaChallenge.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConexaChallenge.Services
 {
-    public class MovieService(AppDbContext dbContext, IHttpClientFactory httpClientFactory) : IMovieService
+    public class MovieService(AppDbContext dbContext, IHttpClientFactory httpClientFactory, ILogger<MovieService> logger) : IMovieService
     {
         private readonly AppDbContext dbContext = dbContext;
         private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
+        private readonly ILogger<MovieService> logger = logger;
 
         public async Task<List<Movie>> GetAllAsync()
         {
@@ -35,7 +37,7 @@ namespace ConexaChallenge.Services
             };
 
             dbContext.Movies.Add(movie);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return movie;
         }
@@ -80,6 +82,7 @@ namespace ConexaChallenge.Services
                 SwapiFilmResponse? response = await client.GetFromJsonAsync<SwapiFilmResponse>("https://swapi.dev/api/films");
                 if (response is null || response.Results.Count == 0)
                 {
+                    logger.LogWarning("SWAPI responded with no films.");
                     return null;
                 }
 
@@ -97,23 +100,36 @@ namespace ConexaChallenge.Services
                     Movie? existing = await dbContext.Movies.FirstOrDefaultAsync(x => x.Title == film.Title);
                     if (existing is not null)
                     {
-                        await UpdateAsync(existing.MovieId, movieRequest);
+                        existing.Title = movieRequest.Title;
+                        existing.Description = movieRequest.Description;
+                        existing.ReleaseDate = movieRequest.ReleaseDate;
+
+                        dbContext.Movies.Update(existing);
                         result.Updated++;
                     }
                     else
                     {
-                        await CreateAsync(movieRequest);
+                        Movie newMovie = new()
+                        {
+                            Title = movieRequest.Title,
+                            Description = movieRequest.Description,
+                            ReleaseDate = movieRequest.ReleaseDate
+                        };
+
+                        await dbContext.Movies.AddAsync(newMovie);
                         result.Created++;
                     }
                 }
 
+                await dbContext.SaveChangesAsync();
+
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Should log SWAPI's fail
+                logger.LogError(ex, "Error syncing films from SWAPI.");
                 return null;
-            }            
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 using ConexaChallenge.Data;
+using ConexaChallenge.Interfaces;
+using ConexaChallenge.Seed;
 using ConexaChallenge.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -6,12 +8,10 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDataBase")));
@@ -32,18 +32,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("NonAdmin", policy =>
-        policy.RequireAssertion(context =>
-            !context.User.IsInRole("Admin")));
+builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddHttpClient();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
+using (IServiceScope scope = app.Services.CreateScope())
+{
+    AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    IConfiguration config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+    await AppDbSeeder.SeedRootUserAsync(db, config);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -1,7 +1,7 @@
 ﻿using ConexaChallenge.Controllers;
 using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
-using ConexaChallenge.Services;
+using ConexaChallenge.Interfaces;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;

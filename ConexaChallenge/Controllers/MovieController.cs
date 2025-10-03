@@ -1,6 +1,6 @@
 ﻿using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
-using ConexaChallenge.Services;
+using ConexaChallenge.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +18,7 @@ namespace ConexaChallenge.Controllers
             return Ok(movies);
         }
 
-        [Authorize(Policy = "NonAdmin")]
+        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetById(int id)
         {

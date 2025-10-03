@@ -1,6 +1,8 @@
-﻿using ConexaChallenge.Data;
+﻿using ConexaChallenge.Common;
+using ConexaChallenge.Data;
 using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
+using ConexaChallenge.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -25,9 +27,10 @@ namespace ConexaChallenge.Services
 
             user.UserName = request.UserName;
             user.PasswordHash = hashedPassword;
+            user.Role = nameof(UserRole.User);
 
             dbContext.Users.Add(user);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return user;
         }
