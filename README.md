@@ -13,7 +13,7 @@ cd ConexaChallenge
 ```
 
 ### 2. Configurar la base de datos
-Editar el archivo `appsettings.json` y actualizar la cadena de conexión con tus credenciales de SQL Server:
+Editar el archivo `appsettings.Developnet.json` y actualizar la cadena de conexión con tus credenciales de SQL Server:
 
 ```json
 "ConnectionStrings": {
@@ -54,7 +54,8 @@ http://localhost:5128/scalar/v1
 ```
 
 Para autenticar es necesario agregar en los headers del request "Authorization" con el valor "Bearer {token obtenido en el login}"
-Ademas se proporciona un usuario admin que se crea automaticamente, cuyas credenciales pueden ser obtenidas del appsettings.Development.json
+
+Ademas se proporciona un usuario admin que se crea automaticamente, cuyas credenciales pueden ser obtenidas del `appsettings.Developnet.json`
 
 ---
 
