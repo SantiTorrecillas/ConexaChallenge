@@ -98,15 +98,28 @@ namespace ConexaChallenge.Services
                     Movie? existing = await dbContext.Movies.FirstOrDefaultAsync(x => x.Title == film.Title);
                     if (existing is not null)
                     {
-                        await UpdateAsync(existing.MovieId, movieRequest);
+                        existing.Title = movieRequest.Title;
+                        existing.Description = movieRequest.Description;
+                        existing.ReleaseDate = movieRequest.ReleaseDate;
+
+                        dbContext.Movies.Update(existing);
                         result.Updated++;
                     }
                     else
                     {
-                        await CreateAsync(movieRequest);
+                        Movie newMovie = new()
+                        {
+                            Title = movieRequest.Title,
+                            Description = movieRequest.Description,
+                            ReleaseDate = movieRequest.ReleaseDate
+                        };
+
+                        await dbContext.Movies.AddAsync(newMovie);
                         result.Created++;
                     }
                 }
+
+                await dbContext.SaveChangesAsync();
 
                 return result;
             }
@@ -114,7 +127,7 @@ namespace ConexaChallenge.Services
             {
                 //Should log SWAPI's fail
                 return null;
-            }            
+            }
         }
     }
 }
