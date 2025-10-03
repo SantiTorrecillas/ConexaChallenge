@@ -29,7 +29,7 @@ namespace ConexaChallenge.Services
             user.Role = nameof(UserRole.User);
 
             dbContext.Users.Add(user);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return user;
         }

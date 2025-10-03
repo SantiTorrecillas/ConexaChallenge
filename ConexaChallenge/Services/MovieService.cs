@@ -35,7 +35,7 @@ namespace ConexaChallenge.Services
             };
 
             dbContext.Movies.Add(movie);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             return movie;
         }
