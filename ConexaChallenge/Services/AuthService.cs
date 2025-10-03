@@ -2,6 +2,7 @@
 using ConexaChallenge.Data;
 using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
+using ConexaChallenge.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

@@ -1,6 +1,7 @@
 ﻿using ConexaChallenge.Data;
 using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
+using ConexaChallenge.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConexaChallenge.Services

@@ -1,4 +1,5 @@
 using ConexaChallenge.Data;
+using ConexaChallenge.Interfaces;
 using ConexaChallenge.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

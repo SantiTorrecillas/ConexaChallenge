@@ -1,7 +1,7 @@
 ﻿using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
 
-namespace ConexaChallenge.Services
+namespace ConexaChallenge.Interfaces
 {
     public interface IAuthService
     {

@@ -1,6 +1,6 @@
 ﻿using ConexaChallenge.Dtos;
 using ConexaChallenge.Entities;
-using ConexaChallenge.Services;
+using ConexaChallenge.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
