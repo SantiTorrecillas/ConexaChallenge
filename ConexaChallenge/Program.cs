@@ -30,10 +30,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("NonAdmin", policy =>
-        policy.RequireAssertion(context =>
-            !context.User.IsInRole("Admin")));
+builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
