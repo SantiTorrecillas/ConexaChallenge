@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConexaChallenge.Services
 {
-    public class MovieService(AppDbContext dbContext, IHttpClientFactory httpClientFactory) : IMovieService
+    public class MovieService(AppDbContext dbContext, IHttpClientFactory httpClientFactory, ILogger<MovieService> logger) : IMovieService
     {
         private readonly AppDbContext dbContext = dbContext;
         private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
+        private readonly ILogger<MovieService> logger = logger;
 
         public async Task<List<Movie>> GetAllAsync()
         {
@@ -81,6 +82,7 @@ namespace ConexaChallenge.Services
                 SwapiFilmResponse? response = await client.GetFromJsonAsync<SwapiFilmResponse>("https://swapi.dev/api/films");
                 if (response is null || response.Results.Count == 0)
                 {
+                    logger.LogWarning("SWAPI responded with no films.");
                     return null;
                 }
 
@@ -123,9 +125,9 @@ namespace ConexaChallenge.Services
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Should log SWAPI's fail
+                logger.LogError(ex, "Error syncing films from SWAPI.");
                 return null;
             }
         }
